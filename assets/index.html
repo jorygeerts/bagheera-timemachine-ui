@@ -1,0 +1,247 @@
+<!doctype html>
+<html>
+<head>
+    <title>TM mk XIV</title>
+    <style type="text/css">
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        #bod {
+            background-color: lightgray;
+            height: 100%;
+            width: 100%;
+            margin: 0px;
+            padding-top: 150px;
+        }
+
+        #selectEra, #searching {
+            width: 600px;
+            margin: auto;
+            border: darkred solid 2px;
+            padding: 20px;
+            background-color: lightgray;
+        }
+
+        #searchVisual {
+            width: 1000px;
+            height: 1000px;
+            margin: auto;
+            align-content: center;
+            vertical-align: center;
+        }
+
+        #selectEra input, #selectEra button, #selectEra #selectEraTxt {
+            width: 600px;
+            height: 50px;
+            font-size: 30px;
+        }
+
+        #selectEra button {
+            background-color: darkred;
+            color: gold;
+        }
+
+
+        #searching, #searchVisual {
+            display: none;
+        }
+
+        #searching {
+            font-size: 30px;
+        }
+    </style>
+
+    <script type="application/javascript">
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+
+        async function selectEra() {
+            document.getElementById("selectEra").style.display = "none"
+            document.getElementById("searching").style.display = "block"
+
+            year = parseInt(document.getElementById("year").value)
+            var eraFunc
+            switch (year) {
+                case -65000:
+                    eraFunc = perhistoric
+                    break
+
+                case -2500:
+                    eraFunc = ancient
+                    break
+
+                case -1000:
+                    eraFunc = middleAges
+                    break
+
+                case -180:
+                    eraFunc = industrialRevolution
+                    break
+
+                case 1000:
+                    eraFunc = future
+                    break
+
+                default:
+                    eraFunc = error
+            }
+
+            await showTexts([
+                "Relativiteits positionering matrix calibreren.",
+                "Calibratie afgerond.",
+                "",
+                "Flux capacitor gereed maken.",
+                "Flux capacitor is gereed gemaakt.",
+                "",
+                "Tijdsperiode bepalen voor " + year,
+            ])
+
+            eraFunc()
+        }
+
+        async function error() {
+
+            await showTexts([
+                "Tijdsperiode bepaald.",
+                "",
+                "Begin openen wormgat.",
+                "",
+                "Stabiliseer visuele overdracht.",
+            ])
+
+            document.getElementById("searching").style.display = "none"
+            await rotateImg(["zo/cbr.jpg"])
+            document.getElementById("searching").style.display = "block"
+
+            loopBackground()
+
+            await showTexts([
+                "Visuele overdracht instabiel.",
+                "",
+                "Wormgat instabiel",
+                "",
+                "Waarschuwing: Instabiliteit niet-noninaal",
+                "",
+                "Waarschuwing: Flux capacitor overbelast",
+                "Waarschuwing: Wormgat critiek",
+                "",
+                "Waarschuwing: Instorting wormgat aanstaande"
+            ])
+        }
+
+        async function loopBackground() {
+            s = document.getElementById("bod").style
+
+            s.backgroundColor = "gray"
+            await sleep(400)
+            s.backgroundColor = "darkgray"
+            await sleep(400)
+
+            while (true) {
+                for (c of ["goldenrod", "crimson", "firebrick"]) {
+                    s.backgroundColor = c
+                    await sleep(400)
+                }
+            }
+        }
+
+        async function perhistoric() {
+            await openToEra("Pre-historie", ["ma/dino1.jpg", "ma/LascauxBull.jpg", "ma/dino2.jpg", "ma/nomaden.jpg"])
+        }
+
+        async function ancient() {
+            await openToEra("Klassieke Oudheid", ["di/rome.jpg", "di/gladitor.jpg", "di/greece.jpg", "di/legion.jpg"])
+        }
+
+        async function middleAges() {
+            await openToEra("Middeleeuwen", ["wo/castle.jpg", "wo/knights.jpg", "wo/market.jpg", "wo/jousting.jpg"])
+        }
+
+        async function industrialRevolution() {
+            await openToEra("Industriële Revolutie", ["do/engine.jpg", "do/workers.jpg", "do/train.jpeg", "do/factories.png"])
+        }
+
+        async function future() {
+            await openToEra("Nabije Toekomst", ["vr/city2.jpg", "vr/hyperloop.jpg", "vr/city1.jpg", "vr/space.jpg"])
+        }
+
+        async function openToEra(name, imgs) {
+            await showTexts([
+                "Tijdsperiode bepaald: " + name + ".",
+                "",
+                "Begin openen wormgat.",
+                "",
+                "Stabiliseer visuele overdracht.",
+            ])
+            document.getElementById("searching").style.display = "none"
+
+            await rotateImg(imgs)
+
+            document.getElementById("searching").style.display = "block"
+            await showTexts([
+                "Visuele overdracht gestabiliseerd.",
+                "",
+                "Alles gereed.",
+                "Deur ontgrendeld.",
+                "Veilige reis.",
+            ])
+        }
+
+        async function showTexts(texts) {
+            for (text of texts) {
+                document.getElementById("searching").innerHTML += text + "<br>"
+                await sleep(500);
+            }
+        }
+
+        async function rotateImg(imgs) {
+            document.getElementById("searchVisual").style.display = "block"
+
+            for (i = 0; i < 15; i++) {
+
+                for (img of imgs) {
+                    document.getElementById("searchVisual").innerHTML = "<img height=\"860\" width=\"1024\" src=\"/" + img + "\">"
+                    await sleep(400 - (i * 50));
+                }
+
+            }
+
+            for (i = 0; i < 15; i++) {
+
+                for (img of imgs) {
+                    document.getElementById("searchVisual").innerHTML = "<img height=\"860\" width=\"1024\" src=\"/" + img + "\">"
+                    await sleep(100);
+                }
+
+            }
+
+            document.getElementById("searchVisual").style.display = "none"
+        }
+    </script>
+</head>
+<body>
+
+<div id="bod">
+    <div id="selectEra">
+        <div id="selectEraTxt">Kies bestemming:</div>
+        <input id="year" type="text">
+        <br>
+        <br>
+        <button onclick="selectEra()">Open wormgat</button>
+    </div>
+
+    <div id="searching">
+
+    </div>
+
+    <div id="searchVisual">
+
+    </div>
+</div>
+
+</body>
+</html>
