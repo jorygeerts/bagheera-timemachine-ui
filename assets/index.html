@@ -8,12 +8,24 @@
             margin: 0;
         }
 
-        #bod {
+        #bod, #lock {
             background-color: lightgray;
             height: 100%;
             width: 100%;
             margin: 0px;
             padding-top: 150px;
+        }
+
+        #bod {
+            display: none;
+        }
+
+        #lock #msg {
+            width: 600px;
+            margin: auto;
+            border: darkred solid 2px;
+            padding: 20px;
+            background-color: lightgray;
         }
 
         #selectEra, #searching {
@@ -56,6 +68,44 @@
     <script type="application/javascript">
         function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function makeRequest(method, url) {
+            return new Promise(function (resolve, reject) {
+                let xhr = new XMLHttpRequest();
+                xhr.open(method, url);
+                xhr.onload = function () {
+                    if (this.status >= 200 && this.status < 300) {
+                        resolve(xhr.response);
+                    } else {
+                        reject({
+                            status: this.status,
+                            statusText: xhr.statusText
+                        });
+                    }
+                };
+                xhr.onerror = function () {
+                    reject({
+                        status: this.status,
+                        statusText: xhr.statusText
+                    });
+                };
+                xhr.send();
+            });
+        }
+
+        async function checkReady() {
+
+            ready = false
+
+            while (!ready) {
+                result = await makeRequest("GET", "/is-ready")
+                console.log(result)
+                ready = result === "yes"
+            }
+
+            document.getElementById("lock").style.display = "none"
+            document.getElementById("bod").style.display = "block"
         }
 
 
@@ -223,7 +273,14 @@
         }
     </script>
 </head>
-<body>
+<body onload="checkReady()">
+
+<div id="lock">
+    <div id="msg">
+        Tijdmachine vergrendeld.<br>
+        Maak de tijdmachine gereed voor gebruik om
+    </div>
+</div>
 
 <div id="bod">
     <div id="selectEra">
